@@ -1,0 +1,49 @@
+buildscript {
+    ext {
+        springBootVersion = '2.1.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    providedRuntime
+
+    // exclude Reactor Netty
+    compile.exclude module: 'spring-boot-starter-tomcat'
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter-data-redis')
+    implementation('org.springframework.boot:spring-boot-starter-mustache')
+    implementation('org.springframework.boot:spring-boot-starter-web')
+    implementation('org.springframework.session:spring-session-data-redis')
+    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    compileOnly('org.projectlombok:lombok')
+    providedRuntime('org.springframework.boot:spring-boot-starter-undertow')
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+
+    compile("org.webjars:webjars-locator-core:0.35")
+    compile("org.webjars.npm:jquery:3.3.1")
+//    compile("org.webjars.npm:vue:2.5.21")
+    compile("org.webjars.npm:bootstrap:4.2.1")
+}

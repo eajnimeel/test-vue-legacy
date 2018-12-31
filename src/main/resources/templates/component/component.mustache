@@ -1,0 +1,37 @@
+<script type="text/x-template" id="demo-vue-template">
+    <div>
+        <h2>vue component</h2>
+        <input type="text" name="name" v-model="name">
+        <button @click="getUserData">get</button>
+        {{=<% %>=}}
+        <div>{{ user.name }}</div>
+        <%={{ }}=%>
+    </div>
+</script>
+<script>
+    Vue.component('demo-vue-component', {
+        template: '#demo-vue-template',
+        data: function () {
+            return {
+                name: '',
+                user: {
+                    name: ''
+                }
+            }
+        },
+        methods: {
+            getUserData: function () {
+                var that = this;
+                var url = '/api/user/' + this.name;
+
+                axios.get(url)
+                    .then(function (response) {
+                        console.log(response.data);
+                        console.log(this);
+                        that.user.name = response.data.name;
+                    });
+                console.log(this.name);
+            }
+        }
+    });
+</script>
