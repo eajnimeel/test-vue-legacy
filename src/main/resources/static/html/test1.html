@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue.js 템플릿 문법</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+    <h1>보간법</h1>
+    <h3>문자열</h3>
+    <div class="result">
+        <div id="example1"></div>
+    </div>
+
+    <h3>HTML</h3>
+    <div class="result">
+        <div id="example2"></div>
+    </div>
+
+    <h3>속성</h3>
+    <div class="result">
+        <div id="example3">
+            <div>id 가 "ctrl_id" 인 읽기전용 입력란 <input v-bind:id="id" v-bind:readonly="disabled" /></div>
+        </div>
+    </div>
+
+    <h3>JavaScript 표현식 사용</h3>
+    <div class="result">
+        <div id="example4">
+            {{ number + 1 }}
+
+            {{ ok ? 'YES' : 'NO' }}
+
+            {{ message.split('').reverse().join('') }}
+
+            <div v-bind:id="'list-' + id"></div>
+        </div>
+    </div>
+</body>
+<script src="https://unpkg.com/vue"></script>
+<script>
+    (function () {
+        new Vue({
+            el: '#example1',
+            template: '<span>이것은 데이터가 어떻게 바인딩 되는지를 나타내는 [{{ name }}] 입니다.</span>',
+            data : function () {
+                return {
+                    name: '예제1'
+                }
+            }
+        });
+
+        new Vue({
+            el: '#example2',
+            template: '<div><p>{{ html }}</p><p><span v-html="html"></span></p></div>',
+            data : {
+                html: '<span style="color: red;">빨간색 텍스트 HTML</span>'
+            }
+        });
+
+        new Vue({
+            el: '#example3',
+            data : {
+                id: 'ctrl_id',
+                disabled: true
+            }
+        });
+
+        new Vue({
+            el: '#example4',
+            data : {
+                number: 10,
+                ok: false,
+                message: '살려주세요',
+                id:1
+            }
+        });
+    })()
+</script>
+</html>

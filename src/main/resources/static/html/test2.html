@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue.js 템플릿 문법</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+    <h1>디렉티브</h1>
+    <h3>전달인자</h3>
+    <div class="result">
+        <div id="example1">
+            <a v-bind:href="url" target="_blank">URL</a><br/>
+            <button v-on:click="info">눌러</button>
+        </div>
+    </div>
+
+    <h3>수식어</h3>
+    <div class="result">
+        <div id="example2">
+            <form v-on:submit.prevent="onSubmit" action="/test2.html">
+                <input type="text" name="name" value="홍길동" />
+                <button>submit</button>
+            </form>
+        </div>
+    </div>
+
+    <h1>약어</h1>
+    <h3>v-bind</h3>
+    <div class="result">
+        <div id="example3">
+            <a v-bind:href="url1" target="_blank">github</a><br/>
+            <a :href="url2" target="_blank">github pages</a><br/>
+        </div>
+    </div>
+
+    <h3>v-on</h3>
+    <div class="result">
+        <div id="example4">
+            <button v-on:click="info1">눌러1</button>
+            <button @click="info2">눌러2</button>
+        </div>
+    </div>
+</body>
+<script src="https://unpkg.com/vue"></script>
+<script>
+    (function () {
+        new Vue({
+            el: '#example1',
+            data : function () {
+                return {
+                    url: 'https://eajnimeel.github.io'
+                }
+            },
+            methods: {
+                info: function() {
+                    alert('버튼 눌림');
+                }
+            }
+        });
+
+        new Vue({
+            el: '#example2',
+            methods: {
+                onSubmit: function () {
+                    alert('submit');
+                }
+            }
+        });
+
+        new Vue({
+            el: '#example3',
+            data: function () {
+                return {
+                    url1: 'https://www.github.io',
+                    url2: 'https://eajnimeel.github.io'
+                }
+            }
+        });
+
+        new Vue({
+            el: '#example4',
+            methods: {
+                info1: function() {
+                    alert('버튼1 눌림');
+                },
+                info2: function() {
+                    alert('버튼2 눌림');
+                }
+            }
+        });
+    })()
+</script>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head>
+    <title>main</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link media="screen" type="text/css" rel="stylesheet" href="/webjars/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" type="text/css" href="/css/style.css" />
+</head>
+<body>
+<h1>{{ title }}</h1>
+<div id="jquery">
+    <h2>jQuery</h2>
+    <input type="text" name="name" id="jq-name"/>
+    <button type="button" id="jq-button">get</button>
+    <div id="jq-div"></div>
+</div>
+<div id="vue">
+    <h2>vue</h2>
+    <input type="text" name="name" v-model="name">
+    <button @click="getUserData">get</button>
+    {{=<% %>=}}
+    <div id="vue-div">{{ user.name }}</div>
+    <%={{ }}=%>
+</div>
+<div id="vue-component">
+    <demo-vue-component />
+</div>
+<div id="vue-inline-template"></div>
+</body>
+<script src="/webjars/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+<script src="/webjars/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/vue"></script>
+<!-- Minified version of `es6-promise-auto` below. -->
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/es6-promise@4/dist/es6-promise.auto.min.js"></script>
+<script src="https://unpkg.com/axios@0.12.0/dist/axios.min.js"></script>
+<script>
+    (function () {
+        var $button = $("#jq-button");
+        $button.on('click', function (ev) {
+            var $name = $('#jq-name');
+            var url = '/api/user/' + $name.val();
+
+            $.getJSON(url, function (response) {
+                console.log(response);
+                $('#jq-div').text(response.name);
+            });
+        });
+    })();
+</script>
+<script>
+    (function () {
+        var app = new Vue({
+            el: '#vue',
+            data: function () {
+                return {
+                    name: '',
+                    user: {
+                        name: ''
+                    }
+                }
+            },
+            methods: {
+                getUserData: function () {
+                    var url = '/api/user/' + this.name;
+                    axios.get(url)
+                            .then(function (response) {
+                                console.log(response.data);
+                                app.user.name = response.data.name;
+                            });
+                    console.log(this.name)
+                }
+            }
+        });
+    })();
+</script>
+{{> component/component }}
+<script>
+    new Vue({
+        el: '#vue-component'
+    })
+</script>
+<script>
+    new Vue({
+        el: '#vue-inline-template',
+        data: function () {
+            return {
+                name: '이름입니다'
+            }
+        },
+        template: '{{=<% %>=}}<div>{{ name }}</div><%={{ }}=%>'
+    })
+</script>
+</html>

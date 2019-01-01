@@ -1,25 +1,19 @@
 package com.example.vuejslegacy.controller;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-@Controller
-public class MainController {
-
-    @GetMapping("/main")
-    public ModelAndView main(ModelAndView mav) {
-        mav.setViewName("main");
-        mav.addObject("title", "MAIN");
-        return mav;
-    }
+@RestController
+public class TestApiController {
 
     @GetMapping("/api/user/{name}")
     public @ResponseBody Map getUser(@PathVariable String name) {
@@ -36,7 +30,7 @@ public class MainController {
         return result;
     }
 
-    @PutMapping("/api/session/{name}")
+    @PostMapping("/api/session/{name}")
     public void putSession(HttpServletRequest request, @PathVariable String name) {
         request.getSession().setAttribute("name", name);
     }

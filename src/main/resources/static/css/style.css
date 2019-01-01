@@ -1,3 +1,25 @@
-main {
-    background-color: azure;
+@charset "UTF-8";
+
+body {
+    padding: 5pt;
+}
+code {
+    padding: 5pt;
+}
+
+pre {
+    padding: 5pt;
+    white-space: pre-wrap;
+    border: 1pt steelblue dashed;
+}
+
+div.result {
+    padding: 5pt;
+    background-color: antiquewhite;
+}
+
+div.static {
+    margin: 2pt;
+    padding: 3pt;
+    border: 1pt olivedrab dashed;
 }
