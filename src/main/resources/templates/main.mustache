@@ -66,8 +66,7 @@
                     var url = '/api/user/' + this.name;
                     axios.get(url)
                             .then(function (response) {
-                                console.log(response.data)
-                                console.log(this)
+                                console.log(response.data);
                                 app.user.name = response.data.name;
                             });
                     console.log(this.name)
