@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>v-if</h1>
-    <h3>&lt;template&gt;에 v-if을 갖는 조건부 그룹 만들기</h3>
+    조건에 따라 노출 여부를 가릴 수 있음.
     <div class="result">
         <div id="example1">
             <h1 v-if="booleanValue">참이라 안보임</h1>
@@ -16,20 +16,90 @@
         </div>
     </div>
 
-    <h3>컴포넌트와 함께 사용하는 방법</h3>
+    <h3>&lt;template&gt;에 v-if을 갖는 조건부 그룹 만들기</h3>
+    일반 태그는 하나씩 밖에 처리 못하니, 여러 태그를 묶어서 처리하고 싶으면 template 태그로 묶어서 사용...
     <div class="result">
         <div id="example2">
-            <my-component class="colorText"></my-component>
-            <my-component v-bind:class="{bgcolor: hasBackgroundColor}"></my-component>
+            <template v-if="ok">
+                <h3>&lt;template&gt; 태그는 사라짐</h3>
+                <div class="static">
+                    <div>템플릿 태그 안의 내용이에요</div>
+                </div>
+            </template>
         </div>
     </div>
 
-    <h1>인라인 스타일 바인딩</h1>
-    <h3>기본</h3>
+    <h3>v-else</h3>
+    새로 고침 할 때마다 Math.random() 값에 따라 다른 것이 출력됨
     <div class="result">
         <div id="example3">
-            <div v-bind:style="{color: color, border: border}">박스</div>
-            <div class="static" v-bind:style="styleObject">박스</div>
+            조건 : Math.random() > 0.5
+            <div v-if="Math.random() > 0.5">0.5 이상</div>
+            <div v-else>0.5 미만</div>
+        </div>
+    </div>
+
+    <h3>v-else-if</h3>
+    선택에 따라 다른 것이 출력 됨
+    <div class="result">
+        <div id="example4">
+            <div v-if="type === 'A'" style="background-color: royalblue">
+                A
+            </div>
+            <div v-else-if="type === 'B'" style="background-color: lightblue">
+                B
+            </div>
+            <div v-else-if="type === 'C'" style="background-color: aliceblue">
+                C
+            </div>
+            <div v-else>
+                Not A/B/C
+            </div>
+            <input id="radio_a" type="radio" v-model="type" value="A" /><label for="radio_a" >A</label>
+            <input id="radio_b" type="radio" v-model="type" value="B" /><label for="radio_b" >B</label>
+            <input id="radio_c" type="radio" v-model="type" value="C" /><label for="radio_c" >C</label>
+            <input id="radio_e" type="radio" v-model="type" value="E" /><label for="radio_e" >E</label>
+        </div>
+    </div>
+
+    <h3>key를 이용한 재사용 가능한 엘리먼트 제어</h3>
+    입력란에 임의의 문자를 입력하고 버튼을 눌러 확인 가능(개발자 도구도 참고)
+    <div class="result">
+        <div id="example5">
+            <div>
+                <h4>모든 엘리먼트가 재사용됨</h4>
+                <template v-if="loginType === 'username'">
+                    <label>사용자 이름</label>
+                    <input placeholder="사용자 이름을 입력하세요">
+                </template>
+                <template v-else>
+                    <label>이메일</label>
+                    <input placeholder="이메일 주소를 입력하세요">
+                </template>
+            </div>
+            <div>
+                <h4>key 속성이 있는 앨리먼트는 별개로 처리됨</h4>
+                <template v-if="loginType === 'username'">
+                    <label>사용자 이름</label>
+                    <input placeholder="사용자 이름을 입력하세요" key="username-input">
+                </template>
+                <template v-else>
+                    <label>이메일</label>
+                    <input placeholder="이메일 주소를 입력하세요" key="email-input">
+                </template>
+            </div>
+            <br/>
+            <button @click="switchForm">로그인 유형 변경</button>
+        </div>
+    </div>
+
+    <h1>v-show</h1>
+    v-if와는 다르게 v-show는 항상 html로 렌더링은 하지만, 조건이 맞지 않으면 해당 엘리먼트를 숨긴다.<br/>
+    &lt;template&gt; 태그와 같이 쓰지 못하며 v-else도 사용하지 못함.
+    <div class="result">
+        <div id="example6">
+            <h1 v-show="ok">보인다</h1>
+            <button @click="toggle">토글</button>
         </div>
     </div>
 </body>
@@ -51,7 +121,7 @@
         new Vue({
             el: '#example2',
             data: {
-                hasBackgroundColor: true
+                ok: true
             }
         });
 
@@ -73,8 +143,7 @@
             el: '#example4',
             data: function () {
                 return {
-                    firstName: 'Gildong',
-                    lastName: 'Hong'
+                    type: 'A'
                 }
             },
             computed: {
@@ -91,47 +160,26 @@
             }
         });
 
-        v4.fullName = 'Minjae Lee';
-
         new Vue({
             el: '#example5',
             data: {
-                question: '',
-                answer: '질문을 하기 전까지는 대답할 수 없습니다.'
-            },
-            watch: {
-                // 질문이 변경될 때 마다 이 기능이 실행됩니다.
-                question: function (newQuestion) {
-                    this.answer = '입력을 기다리는 중...'
-                    this.getAnswer()
-                }
+                loginType: 'username'
             },
             methods: {
-                // _.debounce는 lodash가 제공하는 기능으로
-                // 특히 시간이 많이 소요되는 작업을 실행할 수 있는 빈도를 제한합니다.
-                // 이 경우, 우리는 yesno.wtf/api 에 액세스 하는 빈도를 제한하고,
-                // 사용자가 ajax요청을 하기 전에 타이핑을 완전히 마칠 때까지 기다리길 바랍니다.
-                // _.debounce 함수(또는 이와 유사한 _.throttle)에 대한
-                // 자세한 내용을 보려면 https://lodash.com/docs#debounce 를 방문하세요.
-                getAnswer: _.debounce(
-                    function () {
-                        if (this.question.indexOf('?') === -1) {
-                            this.answer = '질문에는 일반적으로 물음표가 포함 됩니다. ;-)'
-                            return
-                        }
-                        this.answer = '생각중...'
-                        var vm = this
-                        axios.get('https://yesno.wtf/api')
-                            .then(function (response) {
-                                vm.answer = _.capitalize(response.data.answer)
-                            })
-                            .catch(function (error) {
-                                vm.answer = '에러! API 요청에 오류가 있습니다. ' + error
-                            })
-                    },
-                    // 사용자가 입력을 기다리는 시간(밀리세컨드) 입니다.
-                    500
-                )
+                switchForm: function () {
+                    this.loginType = this.loginType === 'username' ? 'email' : 'username'
+                }
+            }
+        });
+        new Vue({
+            el: '#example6',
+            data: {
+                ok: true
+            },
+            methods: {
+                toggle: function () {
+                    this.ok = !this.ok
+                }
             }
         });
     })()
